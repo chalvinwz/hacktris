@@ -3,6 +3,7 @@ package engine
 // PieceType identifies one of the seven tetrominoes.
 type PieceType int
 
+// The seven tetrominoes, followed by pieceCount as a range sentinel.
 const (
 	PieceI PieceType = iota
 	PieceO
@@ -18,6 +19,7 @@ const (
 // colour to draw. Piece types are stored as PieceType+1, garbage as Garbage.
 type Cell uint8
 
+// Reserved cell values; piece cells are stored as PieceType+1.
 const (
 	Empty   Cell = 0
 	Garbage Cell = 8

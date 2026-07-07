@@ -31,7 +31,7 @@ func dialJoin(t *testing.T, addr, name string) (*protocol.Stream, net.Conn) {
 // deadline passes.
 func expect(t *testing.T, st *protocol.Stream, conn net.Conn, want protocol.Type) protocol.Message {
 	t.Helper()
-	conn.SetReadDeadline(time.Now().Add(2 * time.Second))
+	_ = conn.SetReadDeadline(time.Now().Add(2 * time.Second))
 	for {
 		m, err := st.Recv()
 		if err != nil {
@@ -51,13 +51,13 @@ func TestTwoPlayerMatch(t *testing.T) {
 	if err != nil {
 		t.Fatalf("listen: %v", err)
 	}
-	defer srv.Close()
-	go srv.Serve()
+	defer func() { _ = srv.Close() }()
+	go func() { _ = srv.Serve() }()
 
 	s1, c1 := dialJoin(t, addr.String(), "alice")
-	defer c1.Close()
+	defer func() { _ = c1.Close() }()
 	s2, c2 := dialJoin(t, addr.String(), "bob")
-	defer c2.Close()
+	defer func() { _ = c2.Close() }()
 
 	start1 := expect(t, s1, c1, protocol.TypeStart)
 	start2 := expect(t, s2, c2, protocol.TypeStart)
@@ -105,15 +105,15 @@ func TestThreePlayerLastStanding(t *testing.T) {
 	if err != nil {
 		t.Fatalf("listen: %v", err)
 	}
-	defer srv.Close()
-	go srv.Serve()
+	defer func() { _ = srv.Close() }()
+	go func() { _ = srv.Serve() }()
 
 	s1, c1 := dialJoin(t, addr.String(), "a")
-	defer c1.Close()
+	defer func() { _ = c1.Close() }()
 	s2, c2 := dialJoin(t, addr.String(), "b")
-	defer c2.Close()
+	defer func() { _ = c2.Close() }()
 	s3, c3 := dialJoin(t, addr.String(), "c")
-	defer c3.Close()
+	defer func() { _ = c3.Close() }()
 
 	expect(t, s1, c1, protocol.TypeStart)
 	expect(t, s2, c2, protocol.TypeStart)
@@ -121,11 +121,11 @@ func TestThreePlayerLastStanding(t *testing.T) {
 	survivorID := start3.You // s3 is the player we never eliminate
 
 	// One player out: match continues (no result yet, just a PlayerOut).
-	s1.Send(protocol.Message{Type: protocol.TypeEliminated})
+	_ = s1.Send(protocol.Message{Type: protocol.TypeEliminated})
 	expect(t, s3, c3, protocol.TypePlayerOut)
 
 	// Second player out: the survivor on s3 should win.
-	s2.Send(protocol.Message{Type: protocol.TypeEliminated})
+	_ = s2.Send(protocol.Message{Type: protocol.TypeEliminated})
 	res := expect(t, s3, c3, protocol.TypeResult)
 	if res.WinnerID != survivorID {
 		t.Fatalf("winner = %d, want %d", res.WinnerID, survivorID)

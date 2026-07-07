@@ -1,3 +1,7 @@
+// Package engine implements the deterministic, I/O-free classic NES-style
+// Tetris core: the board, pieces, seeded randomiser, gravity/scoring tables and
+// the per-frame tick. Clients drive it with input methods and render from its
+// exported state.
 package engine
 
 // Board dimensions follow the classic 10x20 well.

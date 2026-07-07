@@ -6,17 +6,17 @@ package protocol
 // those relevant to a given Type are populated.
 type Type string
 
+// Message type tags: client→server (join, board, garbage, eliminated) and
+// server→client (start, playerout, result).
 const (
-	// Client -> server.
-	TypeJoin       Type = "join"       // request to enter the lobby
-	TypeBoard      Type = "board"      // a board snapshot to share with opponents
-	TypeGarbage    Type = "garbage"    // garbage to drop on a random living opponent
-	TypeEliminated Type = "eliminated" // sender topped out
+	TypeJoin       Type = "join"       // client→server: request to enter the lobby
+	TypeBoard      Type = "board"      // client→server: a board snapshot to share
+	TypeGarbage    Type = "garbage"    // client→server: garbage for a random opponent
+	TypeEliminated Type = "eliminated" // client→server: sender topped out
 
-	// Server -> client.
-	TypeStart     Type = "start"     // match begins: shared seed + roster
-	TypePlayerOut Type = "playerout" // a player was eliminated
-	TypeResult    Type = "result"    // match over: winner announced
+	TypeStart     Type = "start"     // server→client: match begins, shared seed + roster
+	TypePlayerOut Type = "playerout" // server→client: a player was eliminated
+	TypeResult    Type = "result"    // server→client: match over, winner announced
 )
 
 // Player identifies a participant. IDs start at 1 so they survive JSON

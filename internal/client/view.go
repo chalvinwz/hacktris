@@ -351,16 +351,16 @@ func (m Model) renderWell() string {
 			for x := 0; x < engine.Width; x++ {
 				switch c := grid[y][x]; {
 				case c == engine.Garbage:
-					sb.WriteString(blockSubRow(garbageHex, w, sub, scale))
+					sb.WriteString(blockSubRow(garbageHex, w))
 				case c != engine.Empty:
-					sb.WriteString(blockSubRow(pieceHex[engine.PieceType(c-1)], w, sub, scale))
+					sb.WriteString(blockSubRow(pieceHex[engine.PieceType(c-1)], w))
 				case ghost[y][x]:
 					sb.WriteString(ghostSubRow(pieceHex[kind], w, sub, scale))
 				default:
 					sb.WriteString(emptySubRow(w, sub))
 				}
 			}
-			if !(y == engine.Height-1 && sub == scale-1) {
+			if y != engine.Height-1 || sub != scale-1 {
 				sb.WriteByte('\n')
 			}
 		}
@@ -369,7 +369,7 @@ func (m Model) renderWell() string {
 }
 
 // blockSubRow renders one terminal row of a block cell as a solid colour square.
-func blockSubRow(baseHex string, w, sub, scale int) string {
+func blockSubRow(baseHex string, w int) string {
 	return fg(lipgloss.Color(baseHex)).Render(strings.Repeat("█", w))
 }
 
@@ -448,7 +448,7 @@ func previewPiece(p engine.PieceType, dim bool) string {
 	for y := 0; y < 2; y++ {
 		for x := 0; x < 4; x++ {
 			if box[y][x] {
-				sb.WriteString(blockSubRow(baseHex, 2, 0, 1))
+				sb.WriteString(blockSubRow(baseHex, 2))
 			} else {
 				sb.WriteString("  ")
 			}
@@ -612,6 +612,6 @@ func lerpHex(a, b string, t float64) color.Color {
 }
 
 func hexRGB(s string) (r, g, b int) {
-	fmt.Sscanf(s, "#%02x%02x%02x", &r, &g, &b)
+	_, _ = fmt.Sscanf(s, "#%02x%02x%02x", &r, &g, &b)
 	return
 }

@@ -85,7 +85,7 @@ func (s *Server) handleConn(conn net.Conn) {
 	st := protocol.NewStream(conn)
 	msg, err := st.Recv()
 	if err != nil || msg.Type != protocol.TypeJoin {
-		conn.Close()
+		_ = conn.Close()
 		return
 	}
 	s.mu.Lock()
