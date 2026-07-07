@@ -1,0 +1,78 @@
+name: Bug report
+description: Something in hacktris behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Complete reports get fixed
+        faster. For questions or usage help, use Discussions instead. For
+        security issues, see SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: hacktris version
+      description: Output of `hacktris --version`.
+      placeholder: "e.g. v0.1.0 (or commit hash from a source build)"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS / architecture
+      placeholder: "e.g. macOS 15.5 arm64, Ubuntu 24.04 amd64, Windows 11 amd64"
+    validations:
+      required: true
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal
+      placeholder: "e.g. iTerm2, Ghostty, Windows Terminal, tmux 3.6"
+    validations:
+      required: false
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - Solo
+        - Multiplayer (client)
+        - Multiplayer (server)
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How did you install hacktris?
+      options:
+        - go install
+        - Built from source (make build)
+        - Downloaded release binary
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you observed, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, including the command/flags you ran.
+      placeholder: |
+        1. Run `hacktris-server -players 3`
+        2. Connect with `hacktris -server host:4321 -name ...`
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+      render: text
+    validations:
+      required: false
